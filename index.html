@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating 👍i Story Generator</title>
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --background-color: #f9f9f9;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-container {
+            flex: 1 1 600px;
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .preview-container {
+            flex: 1 1 600px;
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h1, h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 250px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #005b8a;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .secondary-button {
+            background-color: #6c757d;
+        }
+        
+        .secondary-button:hover {
+            background-color: #5a6268;
+        }
+        
+        #storyPreview {
+            position: relative;
+            min-height: 300px;
+        }
+        
+        .thumbs-i-container {
+            position: absolute;
+            top: 100px; /* Default position */
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .thumbs-i-button {
+            background: white;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .thumbs-i-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .i-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-style: italic;
+            font-weight: bold;
+        }
+        
+        /* Popup styling */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            display: none;
+        }
+        
+        .thumbs-i-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            animation: popup-fade-in 0.3s ease;
+            z-index: 9999;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes popup-fade-in {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .popup-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .popup-subtitle {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .popup-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .close-button {
+            color: var(--primary-color);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .close-button:hover {
+            text-decoration: underline;
+        }
+        
+        .option-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .reaction-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .reaction-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .option-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .option-details {
+            flex-grow: 1;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .option-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .code-container {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        #generatedCode {
+            width: 100%;
+            min-height: 200px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .copy-button {
+            background-color: #6c757d;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .show-toast {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Floating 👍i Story Generator</h1>
+            
+            <div class="form-group">
+                <label for="storyTitle">Story Title</label>
+                <input type="text" id="storyTitle" placeholder="Enter story title">
+            </div>
+            
+            <div class="form-group">
+                <label for="storyContent">Story Content</label>
+                <textarea id="storyContent" placeholder="Enter your story content (supports HTML)"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="primaryColor">Primary Color</label>
+                <input type="color" id="primaryColor" value="#0077b6">
+            </div>
+            
+            <div class="form-group">
+                <label for="buttonPosition">Button Position</label>
+                <select id="buttonPosition">
+                    <option value="top-right">Top Right</option>
+                    <option value="middle-right" selected>Middle Right</option>
+                    <option value="bottom-right">Bottom Right</option>
+                    <option value="floating">Floating (follows scroll)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="popupTitle">Popup Title</label>
+                <input type="text" id="popupTitle" placeholder="How would you like to help?">
+            </div>
+            
+            <div class="form-group">
+                <label for="popupSubtitle">Popup Subtitle</label>
+                <input type="text" id="popupSubtitle" placeholder="Select an option below">
+            </div>
+            
+            <div class="form-group">
+                <label>Reaction Options (add up to 4)</label>
+                <div id="optionsContainer">
+                    <div class="option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" placeholder="Option icon (emoji)" class="option-icon-input" style="width: 80px;" value="💧">
+                        <input type="text" placeholder="Option title" class="option-title-input" style="flex-grow: 1;" value="Water Project">
+                        <input type="text" placeholder="Option description" class="option-desc-input" style="flex-grow: 2;" value="Help fund our well-drilling initiative">
+                    </div>
+                    <div class="option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" placeholder="Option icon (emoji)" class="option-icon-input" style="width: 80px;" value="🚜">
+                        <input type="text" placeholder="Option title" class="option-title-input" style="flex-grow: 1;" value="Tools & Equipment">
+                        <input type="text" placeholder="Option description" class="option-desc-input" style="flex-grow: 2;" value="Provide farming equipment to families">
+                    </div>
+                </div>
+                <button type="button" id="addOptionBtn" style="margin-top: 10px;">+ Add Option</button>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" id="previewBtn">Preview Story</button>
+                <button type="button" id="generateBtn">Generate Code</button>
+                <button type="button" id="loadSampleBtn" class="secondary-button">Load Sample</button>
+                <button type="button" id="clearFormBtn" class="secondary-button">Clear Form</button>
+            </div>
+            
+            <div class="code-container" style="display: none;">
+                <h3>Generated Code</h3>
+                <pre id="generatedCode"></pre>
+                <button type="button" id="copyCodeBtn" class="copy-button">Copy Code</button>
+            </div>
+        </div>
+        
+        <div class="preview-container">
+            <h2>Preview</h2>
+            <div id="storyPreview">
+                <p>Your story preview will appear here.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup Elements for Preview -->
+    <div class="popup-overlay" id="previewOverlay"></div>
+    <div class="thumbs-i-popup" id="previewPopup">
+        <div class="popup-header">
+            <div class="popup-title" id="previewPopupTitle">How would you like to help?</div>
+            <div class="popup-subtitle" id="previewPopupSubtitle">Select an option below</div>
+        </div>
+        
+        <div class="option-container" id="previewOptions">
+            <!-- Options will be added here dynamically -->
+        </div>
+        
+        <div class="popup-footer">
+            <div></div>
+            <span class="close-button" onclick="closePreviewPopup()">Close</span>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast">Code copied to clipboard!</div>
+</body>
+  <script>
+    // DOM Elements
+document.addEventListener('DOMContentLoaded', function() {
+    const storyTitleInput = document.getElementById('storyTitle');
+    const storyContentInput = document.getElementById('storyContent');
+    const primaryColorInput = document.getElementById('primaryColor');
+    const buttonPositionSelect = document.getElementById('buttonPosition');
+    const popupTitleInput = document.getElementById('popupTitle');
+    const popupSubtitleInput = document.getElementById('popupSubtitle');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+    const clearFormBtn = document.getElementById('clearFormBtn');
+    const storyPreview = document.getElementById('storyPreview');
+    const generatedCodeContainer = document.querySelector('.code-container');
+    const generatedCode = document.getElementById('generatedCode');
+    const copyCodeBtn = document.getElementById('copyCodeBtn');
+    const previewOverlay = document.getElementById('previewOverlay');
+    const previewPopup = document.getElementById('previewPopup');
+    const previewPopupTitle = document.getElementById('previewPopupTitle');
+    const previewPopupSubtitle = document.getElementById('previewPopupSubtitle');
+    const previewOptions = document.getElementById('previewOptions');
+    const toast = document.getElementById('toast');
+
+    // Event Listeners
+    previewBtn.addEventListener('click', updatePreview);
+    generateBtn.addEventListener('click', generateCode);
+    loadSampleBtn.addEventListener('click', loadSample);
+    clearFormBtn.addEventListener('click', clearForm);
+    copyCodeBtn.addEventListener('click', copyToClipboard);
+    addOptionBtn.addEventListener('click', addOption);
+    previewOverlay.addEventListener('click', closePreviewPopup);
+
+    // Initialize
+    updatePreview();
+
+    // Update Preview
+    function updatePreview() {
+        // Update story content
+        storyPreview.innerHTML = `
+            <h2>${storyTitleInput.value || 'Story Title'}</h2>
+            ${storyContentInput.value || '<p>Your story content will appear here.</p>'}
+        `;
+        
+        // Add thumbs-i button
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'thumbs-i-container';
+        
+        // Set position based on selection
+        switch(buttonPositionSelect.value) {
+            case 'top-right':
+                buttonContainer.style.top = '20px';
+                break;
+            case 'middle-right':
+                buttonContainer.style.top = '100px';
+                break;
+            case 'bottom-right':
+                buttonContainer.style.top = '180px';
+                break;
+            case 'floating':
+                buttonContainer.style.position = 'fixed';
+                buttonContainer.style.top = '200px';
+                break;
+        }
+        
+        buttonContainer.innerHTML = `
+            <button class="thumbs-i-button" onclick="openPreviewPopup()">👍
+                <div class="i-indicator">i</div>
+            </button>
+        `;
+        storyPreview.appendChild(buttonContainer);
+        
+        // Update colors
+        document.documentElement.style.setProperty('--primary-color', primaryColorInput.value);
+        
+        // Update popup content
+        previewPopupTitle.textContent = popupTitleInput.value || 'How would you like to help?';
+        previewPopupSubtitle.textContent = popupSubtitleInput.value || 'Select an option below';
+        
+        // Update options
+        updatePreviewOptions();
+    }
+
+    // Update Preview Options
+    function updatePreviewOptions() {
+        previewOptions.innerHTML = '';
+        
+        const optionRows = document.querySelectorAll('.option-row');
+        optionRows.forEach(row => {
+            const icon = row.querySelector('.option-icon-input').value;
+            const title = row.querySelector('.option-title-input').value;
+            const desc = row.querySelector('.option-desc-input').value;
+            
+            if (icon && title) {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'reaction-option';
+                optionEl.innerHTML = `
+                    <span class="option-icon">${icon}</span>
+                    <div class="option-details">
+                        <div class="option-title">${title}</div>
+                        ${desc ? `<div class="option-desc">${desc}</div>` : ''}
+                    </div>
+                `;
+                previewOptions.appendChild(optionEl);
+            }
+        });
+    }
+
+    // Add Option
+    function addOption() {
+        if (document.querySelectorAll('.option-row').length >= 4) {
+            alert('Maximum 4 options allowed');
+            return;
+        }
+        
+        const newRow = document.createElement('div');
+        newRow.className = 'option-row';
+        newRow.style = 'display: flex; gap: 10px; margin-bottom: 10px;';
+        newRow.innerHTML = `
+            <input type="text" placeholder="Option icon (emoji)" class="option-icon-input" style="width: 80px;">
+            <input type="text" placeholder="Option title" class="option-title-input" style="flex-grow: 1;">
+            <input type="text" placeholder="Option description" class="option-desc-input" style="flex-grow: 2;">
+            <button type="button" class="remove-option" style="background-color: #dc3545; width: 30px; padding: 0;">×</button>
+        `;
+        
+        optionsContainer.appendChild(newRow);
+        
+        // Add remove event listener
+        newRow.querySelector('.remove-option').addEventListener('click', function() {
+            optionsContainer.removeChild(newRow);
+        });
+    }
+
+    // Generate Code
+    function generateCode() {
+        const title = storyTitleInput.value || 'Story Title';
+        const content = storyContentInput.value || '<p>Your story content here.</p>';
+        const primaryColor = primaryColorInput.value;
+        const buttonPosition = buttonPositionSelect.value;
+        const popupTitle = popupTitleInput.value || 'How would you like to help?';
+        const popupSubtitle = popupSubtitleInput.value || 'Select an option below';
+        
+        // Get options
+        let optionsHTML = '';
+        const optionRows = document.querySelectorAll('.option-row');
+        optionRows.forEach(row => {
+            const icon = row.querySelector('.option-icon-input').value;
+            const title = row.querySelector('.option-title-input').value;
+            const desc = row.querySelector('.option-desc-input').value;
+            
+            if (icon && title) {
+                optionsHTML += `
+                    <div class="reaction-option" onclick="alert('In a complete implementation, this would perform an action')">
+                        <span class="option-icon">${icon}</span>
+                        <div class="option-details">
+                            <div class="option-title">${title}</div>
+                            ${desc ? `<div class="option-desc">${desc}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        // Generate position CSS
+        let positionCSS = '';
+        switch(buttonPosition) {
+            case 'top-right':
+                positionCSS = 'top: 20px; right: 20px;';
+                break;
+            case 'middle-right':
+                positionCSS = 'top: 100px; right: 20px;';
+                break;
+            case 'bottom-right':
+                positionCSS = 'top: 180px; right: 20px;';
+                break;
+            case 'floating':
+                positionCSS = 'position: fixed; top: 200px; right: 20px;';
+                break;
+        }
+        
+        // Create HTML code
+        const code = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        h1, h2 {
+            color: ${primaryColor};
+        }
+        
+        .thumbs-i-container {
+            ${positionCSS}
+            z-index: 100;
+        }
+        
+        .thumbs-i-button {
+            background: white;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .thumbs-i-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .i-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: ${primaryColor};
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-style: italic;
+            font-weight: bold;
+        }
+        
+        /* Popup styling */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            display: none;
+        }
+        
+        .thumbs-i-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            animation: popup-fade-in 0.3s ease;
+            z-index: 9999;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes popup-fade-in {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .popup-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: ${primaryColor};
+            margin-bottom: 5px;
+        }
+        
+        .popup-subtitle {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .option-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .reaction-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .reaction-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .option-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .option-details {
+            flex-grow: 1;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .option-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .popup-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .close-button {
+            color: ${primaryColor};
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .close-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="story-container">
+        <h1>${title}</h1>
+        ${content}
+    </div>
+    
+    <!-- Floating 👍i button -->
+    <div class="thumbs-i-container">
+        <button class="thumbs-i-button" onclick="openPopup()">👍
+            <div class="i-indicator">i</div>
+        </button>
+    </div>
+    
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    
+    <!-- Thumbs-i Popup -->
+    <div class="thumbs-i-popup" id="thumbsPopup">
+        <div class="popup-header">
+            <div class="popup-title">${popupTitle}</div>
+            <div class="popup-subtitle">${popupSubtitle}</div>
+        </div>
+        
+        <div class="option-container">
+            ${optionsHTML}
+        </div>
+        
+        <div class="popup-footer">
+            <div></div>
+            <span class="close-button" onclick="closePopup()">Close</span>
+        </div>
+    </div>
+    
+    <script>
+        // Open popup
+        function openPopup() {
+            document.getElementById('popupOverlay').style.display = 'block';
+            document.getElementById('thumbsPopup').style.display = 'block';
+        }
+        
+        // Close popup
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('thumbsPopup').style.display = 'none';
+        }
+        
+        // Close popup when clicking overlay
+        document.getElementById('popupOverlay').addEventListener('click', closePopup);
+    </script>
+</body>
+</html>`;
+        
+        // Show the generated code
+        generatedCode.textContent = code;
+        generatedCodeContainer.style.display = 'block';
+        
+        // Scroll to code
+        generatedCodeContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Copy to Clipboard
+    function copyToClipboard() {
+        const textArea = document.createElement('textarea');
+        textArea.value = generatedCode.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Show toast
+        toast.classList.add('show-toast');
+        setTimeout(() => {
+            toast.classList.remove('show-toast');
+        }, 2000);
+    }
+
+    // Load Sample
+    function loadSample() {
+        storyTitleInput.value = 'Tiamoyo Empower Project: Transforming Lives in Tanzania';
+        storyContentInput.value = `<p>The sun rises over the gentle hills of Mwanza, Tanzania, casting long shadows across fields that have seen better days. Here, in the small community surrounding the Agape farm, generations of families have worked the land with determination and resilience.</p>
+        
+<p>But climate change has made their efforts increasingly difficult. Unpredictable rainfall, prolonged droughts, and depleted soil have created a cycle that's hard to break. When our team first visited in 2019, we saw the struggles firsthand – women and children walking miles to collect water, farmers watching helplessly as crops withered, and a community with abundant potential held back by circumstances beyond their control.</p>
+
+<function_results>OK</function_results>
+<antArtifact identifier="floating-thumbsi-js"
+<antArtifact identifier="floating-thumbsi-js"
+<antArtifact identifier="floating-thumbsi-js"
+<antArtifact identifier="floating-thumbsi-js"
+  </script>
+  </body>
+</html>

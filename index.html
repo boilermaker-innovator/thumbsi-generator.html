@@ -1,3 +1,8 @@
+I'll rewrite the corrected code in two clear sections that you can easily join together.
+
+## SECTION 1: HTML and CSS (Beginning to Script Tag)
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -410,191 +415,190 @@
     </div>
     
     <div id="toast" class="toast">Code copied to clipboard!</div>
-</body>
-  <script>
+<script>
     // DOM Elements
-document.addEventListener('DOMContentLoaded', function() {
-    const storyTitleInput = document.getElementById('storyTitle');
-    const storyContentInput = document.getElementById('storyContent');
-    const primaryColorInput = document.getElementById('primaryColor');
-    const buttonPositionSelect = document.getElementById('buttonPosition');
-    const popupTitleInput = document.getElementById('popupTitle');
-    const popupSubtitleInput = document.getElementById('popupSubtitle');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const addOptionBtn = document.getElementById('addOptionBtn');
-    const previewBtn = document.getElementById('previewBtn');
-    const generateBtn = document.getElementById('generateBtn');
-    const loadSampleBtn = document.getElementById('loadSampleBtn');
-    const clearFormBtn = document.getElementById('clearFormBtn');
-    const storyPreview = document.getElementById('storyPreview');
-    const generatedCodeContainer = document.querySelector('.code-container');
-    const generatedCode = document.getElementById('generatedCode');
-    const copyCodeBtn = document.getElementById('copyCodeBtn');
-    const previewOverlay = document.getElementById('previewOverlay');
-    const previewPopup = document.getElementById('previewPopup');
-    const previewPopupTitle = document.getElementById('previewPopupTitle');
-    const previewPopupSubtitle = document.getElementById('previewPopupSubtitle');
-    const previewOptions = document.getElementById('previewOptions');
-    const toast = document.getElementById('toast');
+    document.addEventListener('DOMContentLoaded', function() {
+        const storyTitleInput = document.getElementById('storyTitle');
+        const storyContentInput = document.getElementById('storyContent');
+        const primaryColorInput = document.getElementById('primaryColor');
+        const buttonPositionSelect = document.getElementById('buttonPosition');
+        const popupTitleInput = document.getElementById('popupTitle');
+        const popupSubtitleInput = document.getElementById('popupSubtitle');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const addOptionBtn = document.getElementById('addOptionBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const loadSampleBtn = document.getElementById('loadSampleBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const storyPreview = document.getElementById('storyPreview');
+        const generatedCodeContainer = document.querySelector('.code-container');
+        const generatedCode = document.getElementById('generatedCode');
+        const copyCodeBtn = document.getElementById('copyCodeBtn');
+        const previewOverlay = document.getElementById('previewOverlay');
+        const previewPopup = document.getElementById('previewPopup');
+        const previewPopupTitle = document.getElementById('previewPopupTitle');
+        const previewPopupSubtitle = document.getElementById('previewPopupSubtitle');
+        const previewOptions = document.getElementById('previewOptions');
+        const toast = document.getElementById('toast');
 
-    // Event Listeners
-    previewBtn.addEventListener('click', updatePreview);
-    generateBtn.addEventListener('click', generateCode);
-    loadSampleBtn.addEventListener('click', loadSample);
-    clearFormBtn.addEventListener('click', clearForm);
-    copyCodeBtn.addEventListener('click', copyToClipboard);
-    addOptionBtn.addEventListener('click', addOption);
-    previewOverlay.addEventListener('click', closePreviewPopup);
+        // Event Listeners
+        previewBtn.addEventListener('click', updatePreview);
+        generateBtn.addEventListener('click', generateCode);
+        loadSampleBtn.addEventListener('click', loadSample);
+        clearFormBtn.addEventListener('click', clearForm);
+        copyCodeBtn.addEventListener('click', copyToClipboard);
+        addOptionBtn.addEventListener('click', addOption);
+        previewOverlay.addEventListener('click', closePreviewPopup);
 
-    // Initialize
-    updatePreview();
+        // Initialize
+        updatePreview();
 
-    // Update Preview
-    function updatePreview() {
-        // Update story content
-        storyPreview.innerHTML = `
-            <h2>${storyTitleInput.value || 'Story Title'}</h2>
-            ${storyContentInput.value || '<p>Your story content will appear here.</p>'}
-        `;
-        
-        // Add thumbs-i button
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'thumbs-i-container';
-        
-        // Set position based on selection
-        switch(buttonPositionSelect.value) {
-            case 'top-right':
-                buttonContainer.style.top = '20px';
-                break;
-            case 'middle-right':
-                buttonContainer.style.top = '100px';
-                break;
-            case 'bottom-right':
-                buttonContainer.style.top = '180px';
-                break;
-            case 'floating':
-                buttonContainer.style.position = 'fixed';
-                buttonContainer.style.top = '200px';
-                break;
-        }
-        
-        buttonContainer.innerHTML = `
-            <button class="thumbs-i-button" onclick="openPreviewPopup()">👍
-                <div class="i-indicator">i</div>
-            </button>
-        `;
-        storyPreview.appendChild(buttonContainer);
-        
-        // Update colors
-        document.documentElement.style.setProperty('--primary-color', primaryColorInput.value);
-        
-        // Update popup content
-        previewPopupTitle.textContent = popupTitleInput.value || 'How would you like to help?';
-        previewPopupSubtitle.textContent = popupSubtitleInput.value || 'Select an option below';
-        
-        // Update options
-        updatePreviewOptions();
-    }
-
-    // Update Preview Options
-    function updatePreviewOptions() {
-        previewOptions.innerHTML = '';
-        
-        const optionRows = document.querySelectorAll('.option-row');
-        optionRows.forEach(row => {
-            const icon = row.querySelector('.option-icon-input').value;
-            const title = row.querySelector('.option-title-input').value;
-            const desc = row.querySelector('.option-desc-input').value;
+        // Update Preview
+        function updatePreview() {
+            // Update story content
+            storyPreview.innerHTML = `
+                <h2>${storyTitleInput.value || 'Story Title'}</h2>
+                ${storyContentInput.value || '<p>Your story content will appear here.</p>'}
+            `;
             
-            if (icon && title) {
-                const optionEl = document.createElement('div');
-                optionEl.className = 'reaction-option';
-                optionEl.innerHTML = `
-                    <span class="option-icon">${icon}</span>
-                    <div class="option-details">
-                        <div class="option-title">${title}</div>
-                        ${desc ? `<div class="option-desc">${desc}</div>` : ''}
-                    </div>
-                `;
-                previewOptions.appendChild(optionEl);
+            // Add thumbs-i button
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'thumbs-i-container';
+            
+            // Set position based on selection
+            switch(buttonPositionSelect.value) {
+                case 'top-right':
+                    buttonContainer.style.top = '20px';
+                    break;
+                case 'middle-right':
+                    buttonContainer.style.top = '100px';
+                    break;
+                case 'bottom-right':
+                    buttonContainer.style.top = '180px';
+                    break;
+                case 'floating':
+                    buttonContainer.style.position = 'fixed';
+                    buttonContainer.style.top = '200px';
+                    break;
             }
-        });
-    }
-
-    // Add Option
-    function addOption() {
-        if (document.querySelectorAll('.option-row').length >= 4) {
-            alert('Maximum 4 options allowed');
-            return;
-        }
-        
-        const newRow = document.createElement('div');
-        newRow.className = 'option-row';
-        newRow.style = 'display: flex; gap: 10px; margin-bottom: 10px;';
-        newRow.innerHTML = `
-            <input type="text" placeholder="Option icon (emoji)" class="option-icon-input" style="width: 80px;">
-            <input type="text" placeholder="Option title" class="option-title-input" style="flex-grow: 1;">
-            <input type="text" placeholder="Option description" class="option-desc-input" style="flex-grow: 2;">
-            <button type="button" class="remove-option" style="background-color: #dc3545; width: 30px; padding: 0;">×</button>
-        `;
-        
-        optionsContainer.appendChild(newRow);
-        
-        // Add remove event listener
-        newRow.querySelector('.remove-option').addEventListener('click', function() {
-            optionsContainer.removeChild(newRow);
-        });
-    }
-
-    // Generate Code
-    function generateCode() {
-        const title = storyTitleInput.value || 'Story Title';
-        const content = storyContentInput.value || '<p>Your story content here.</p>';
-        const primaryColor = primaryColorInput.value;
-        const buttonPosition = buttonPositionSelect.value;
-        const popupTitle = popupTitleInput.value || 'How would you like to help?';
-        const popupSubtitle = popupSubtitleInput.value || 'Select an option below';
-        
-        // Get options
-        let optionsHTML = '';
-        const optionRows = document.querySelectorAll('.option-row');
-        optionRows.forEach(row => {
-            const icon = row.querySelector('.option-icon-input').value;
-            const title = row.querySelector('.option-title-input').value;
-            const desc = row.querySelector('.option-desc-input').value;
             
-            if (icon && title) {
-                optionsHTML += `
-                    <div class="reaction-option" onclick="alert('In a complete implementation, this would perform an action')">
+            buttonContainer.innerHTML = `
+                <button class="thumbs-i-button" onclick="openPreviewPopup()">👍
+                    <div class="i-indicator">i</div>
+                </button>
+            `;
+            storyPreview.appendChild(buttonContainer);
+            
+            // Update colors
+            document.documentElement.style.setProperty('--primary-color', primaryColorInput.value);
+            
+            // Update popup content
+            previewPopupTitle.textContent = popupTitleInput.value || 'How would you like to help?';
+            previewPopupSubtitle.textContent = popupSubtitleInput.value || 'Select an option below';
+            
+            // Update options
+            updatePreviewOptions();
+        }
+
+        // Update Preview Options
+        function updatePreviewOptions() {
+            previewOptions.innerHTML = '';
+            
+            const optionRows = document.querySelectorAll('.option-row');
+            optionRows.forEach(row => {
+                const icon = row.querySelector('.option-icon-input').value;
+                const title = row.querySelector('.option-title-input').value;
+                const desc = row.querySelector('.option-desc-input').value;
+                
+                if (icon && title) {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'reaction-option';
+                    optionEl.innerHTML = `
                         <span class="option-icon">${icon}</span>
                         <div class="option-details">
                             <div class="option-title">${title}</div>
                             ${desc ? `<div class="option-desc">${desc}</div>` : ''}
                         </div>
-                    </div>
-                `;
-            }
-        });
-        
-        // Generate position CSS
-        let positionCSS = '';
-        switch(buttonPosition) {
-            case 'top-right':
-                positionCSS = 'top: 20px; right: 20px;';
-                break;
-            case 'middle-right':
-                positionCSS = 'top: 100px; right: 20px;';
-                break;
-            case 'bottom-right':
-                positionCSS = 'top: 180px; right: 20px;';
-                break;
-            case 'floating':
-                positionCSS = 'position: fixed; top: 200px; right: 20px;';
-                break;
+                    `;
+                    previewOptions.appendChild(optionEl);
+                }
+            });
         }
-        
-        // Create HTML code
-        const code = `<!DOCTYPE html>
+
+        // Add Option
+        function addOption() {
+            if (document.querySelectorAll('.option-row').length >= 4) {
+                alert('Maximum 4 options allowed');
+                return;
+            }
+            
+            const newRow = document.createElement('div');
+            newRow.className = 'option-row';
+            newRow.style = 'display: flex; gap: 10px; margin-bottom: 10px;';
+            newRow.innerHTML = `
+                <input type="text" placeholder="Option icon (emoji)" class="option-icon-input" style="width: 80px;">
+                <input type="text" placeholder="Option title" class="option-title-input" style="flex-grow: 1;">
+                <input type="text" placeholder="Option description" class="option-desc-input" style="flex-grow: 2;">
+                <button type="button" class="remove-option" style="background-color: #dc3545; width: 30px; padding: 0;">×</button>
+            `;
+            
+            optionsContainer.appendChild(newRow);
+            
+            // Add remove event listener
+            newRow.querySelector('.remove-option').addEventListener('click', function() {
+                optionsContainer.removeChild(newRow);
+            });
+        }
+
+        // Generate Code
+        function generateCode() {
+            const title = storyTitleInput.value || 'Story Title';
+            const content = storyContentInput.value || '<p>Your story content here.</p>';
+            const primaryColor = primaryColorInput.value;
+            const buttonPosition = buttonPositionSelect.value;
+            const popupTitle = popupTitleInput.value || 'How would you like to help?';
+            const popupSubtitle = popupSubtitleInput.value || 'Select an option below';
+            
+            // Get options
+            let optionsHTML = '';
+            const optionRows = document.querySelectorAll('.option-row');
+            optionRows.forEach(row => {
+                const icon = row.querySelector('.option-icon-input').value;
+                const title = row.querySelector('.option-title-input').value;
+                const desc = row.querySelector('.option-desc-input').value;
+                
+                if (icon && title) {
+                    optionsHTML += `
+                        <div class="reaction-option" onclick="alert('In a complete implementation, this would perform an action')">
+                            <span class="option-icon">${icon}</span>
+                            <div class="option-details">
+                                <div class="option-title">${title}</div>
+                                ${desc ? `<div class="option-desc">${desc}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Generate position CSS
+            let positionCSS = '';
+            switch(buttonPosition) {
+                case 'top-right':
+                    positionCSS = 'top: 20px; right: 20px;';
+                    break;
+                case 'middle-right':
+                    positionCSS = 'top: 100px; right: 20px;';
+                    break;
+                case 'bottom-right':
+                    positionCSS = 'top: 180px; right: 20px;';
+                    break;
+                case 'floating':
+                    positionCSS = 'position: fixed; top: 200px; right: 20px;';
+                    break;
+            }
+            
+            // Create HTML code
+            const code = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -824,43 +828,57 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>`;
-        
-        // Show the generated code
-        generatedCode.textContent = code;
-        generatedCodeContainer.style.display = 'block';
-        
-        // Scroll to code
-        generatedCodeContainer.scrollIntoView({ behavior: 'smooth' });
-    }
+            
+            // Show the generated code
+            generatedCode.textContent = code;
+            generatedCodeContainer.style.display = 'block';
+            
+            // Scroll to code
+            generatedCodeContainer.scrollIntoView({ behavior: 'smooth' });
+        }
 
-    // Copy to Clipboard
-    function copyToClipboard() {
-        const textArea = document.createElement('textarea');
-        textArea.value = generatedCode.textContent;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        // Show toast
-        toast.classList.add('show-toast');
-        setTimeout(() => {
-            toast.classList.remove('show-toast');
-        }, 2000);
-    }
+        // Copy to Clipboard
+        function copyToClipboard() {
+            const textArea = document.createElement('textarea');
+            textArea.value = generatedCode.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show toast
+            toast.classList.add('show-toast');
+            setTimeout(() => {
+                toast.classList.remove('show-toast');
+            }, 2000);
+        }
 
-    // Load Sample
-    function loadSample() {
-        storyTitleInput.value = 'Tiamoyo Empower Project: Transforming Lives in Tanzania';
-        storyContentInput.value = `<p>The sun rises over the gentle hills of Mwanza, Tanzania, casting long shadows across fields that have seen better days. Here, in the small community surrounding the Agape farm, generations of families have worked the land with determination and resilience.</p>
+        // Load Sample
+        function loadSample() {
+            storyTitleInput.value = 'Tiamoyo Empower Project: Transforming Lives in Tanzania';
+            storyContentInput.value = `<p>The sun rises over the gentle hills of Mwanza, Tanzania, casting long shadows across fields that have seen better days. Here, in the small community surrounding the Agape farm, generations of families have worked the land with determination and resilience.</p>
+            
+<p>But climate change has made their efforts increasingly difficult. Unpredictable rainfall, prolonged droughts, and depleted soil have created a cycle that's hard to break. When our team first visited in 2019, we saw the struggles firsthand – women and children walking miles to collect water, farmers watching helplessly as crops withered, and a community with abundant potential held back by circumstances beyond their control.</p>`;
+            
+            // Set other sample values
+            primaryColorInput.value = '#0077b6';
+            buttonPositionSelect.value = 'middle-right';
+            popupTitleInput.value = 'How would you like to help?';
+            popupSubtitleInput.value = 'Select an option below';
+            
+            // Update the preview
+            updatePreview();
+        }
         
-<p>But climate change has made their efforts increasingly difficult. Unpredictable rainfall, prolonged droughts, and depleted soil have created a cycle that's hard to break. When our team first visited in 2019, we saw the struggles firsthand – women and children walking miles to collect water, farmers watching helplessly as crops withered, and a community with abundant potential held back by circumstances beyond their control.</p>
-
-<function_results>OK</function_results>
-<antArtifact identifier="floating-thumbsi-js"
-<antArtifact identifier="floating-thumbsi-js"
-<antArtifact identifier="floating-thumbsi-js"
-<antArtifact identifier="floating-thumbsi-js"
-  </script>
-  </body>
-</html>
+        // Clear Form
+        function clearForm() {
+            storyTitleInput.value = '';
+            storyContentInput.value = '';
+            primaryColorInput.value = '#0077b6';
+            buttonPositionSelect.value = 'middle-right';
+            popupTitleInput.value = '';
+            popupSubtitleInput.value = '';
+            
+            // Clear options except the first two
+            const optionRows = document.querySelectorAll('.option-row');
+            for (​​​​​​​​​​​​​​​​

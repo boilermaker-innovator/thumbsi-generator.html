@@ -1,8 +1,4 @@
-I'll rewrite the corrected code in two clear sections that you can easily join together.
 
-## SECTION 1: HTML and CSS (Beginning to Script Tag)
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -870,7 +866,7 @@ I'll rewrite the corrected code in two clear sections that you can easily join t
             updatePreview();
         }
         
-        // Clear Form
+              // Clear Form
         function clearForm() {
             storyTitleInput.value = '';
             storyContentInput.value = '';
@@ -881,4 +877,54 @@ I'll rewrite the corrected code in two clear sections that you can easily join t
             
             // Clear options except the first two
             const optionRows = document.querySelectorAll('.option-row');
-            for (​​​​​​​​​​​​​​​​
+            for (let i = 2; i < optionRows.length; i++) {
+                optionsContainer.removeChild(optionRows[i]);
+            }
+            
+            // Reset first two option rows
+            const firstRow = document.querySelectorAll('.option-row')[0];
+            if (firstRow) {
+                firstRow.querySelector('.option-icon-input').value = '💧';
+                firstRow.querySelector('.option-title-input').value = 'Water Project';
+                firstRow.querySelector('.option-desc-input').value = 'Help fund our well-drilling initiative';
+            }
+            
+            const secondRow = document.querySelectorAll('.option-row')[1];
+            if (secondRow) {
+                secondRow.querySelector('.option-icon-input').value = '🚜';
+                secondRow.querySelector('.option-title-input').value = 'Tools & Equipment';
+                secondRow.querySelector('.option-desc-input').value = 'Provide farming equipment to families';
+            }
+            
+            // Update preview
+            updatePreview();
+            
+            // Hide code container
+            generatedCodeContainer.style.display = 'none';
+        }
+
+        // Functions for popup in preview
+        function openPreviewPopup() {
+            previewOverlay.style.display = 'block';
+            previewPopup.style.display = 'block';
+        }
+        
+        function closePreviewPopup() {
+            previewOverlay.style.display = 'none';
+            previewPopup.style.display = 'none';
+        }
+    });
+    
+    // Make functions available globally
+    window.openPreviewPopup = function() {
+        document.getElementById('previewOverlay').style.display = 'block';
+        document.getElementById('previewPopup').style.display = 'block';
+    };
+    
+    window.closePreviewPopup = function() {
+        document.getElementById('previewOverlay').style.display = 'none';
+        document.getElementById('previewPopup').style.display = 'none';
+    };
+</script>
+</body>
+</html>
